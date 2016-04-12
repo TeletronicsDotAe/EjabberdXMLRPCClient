@@ -17,7 +17,7 @@ public class EjabberdXMLRPCClientBuilder {
     String ejabberdHostname = "localhost";
     String ejabberdPort = "4560";
     String ejabberdProtocol = "http";
-    String ejabberdPath = "RPC2";
+    String ejabberdPath = "/RPC2";
 
     public EjabberdXMLRPCClientBuilder setExecutorService(ExecutorService executorService){
         this.executorService = executorService;
@@ -45,7 +45,7 @@ public class EjabberdXMLRPCClientBuilder {
     }
 
     public EjabberdXMLRPCClient build() throws MalformedURLException {
-        final URL ejabberdUrl = new URL(this.ejabberdProtocol, this.ejabberdHostname, this.ejabberdPort);
+        final URL ejabberdUrl = buildUrl();
 
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
         config.setServerURL(ejabberdUrl);
@@ -55,4 +55,9 @@ public class EjabberdXMLRPCClientBuilder {
 
         return new EjabberdXMLRPCClient(this.executorService, client);
     }
+
+    URL buildUrl() throws MalformedURLException {
+        return new URL(this.ejabberdProtocol, this.ejabberdHostname, Integer.parseInt(this.ejabberdPort), this.ejabberdPath);
+    }
+
 }
