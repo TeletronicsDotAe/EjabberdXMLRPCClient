@@ -1,16 +1,17 @@
 package ae.teletronics.ejabberd;
 
-import ae.teletronics.ejabberd.entity.response.*;
+import ae.teletronics.ejabberd.entity.response.BooleanXmppResponse;
+import ae.teletronics.ejabberd.entity.response.GetRosterResponse;
+import ae.teletronics.ejabberd.entity.response.GetUsersResponse;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by kristian on 4/7/16.
@@ -121,6 +122,23 @@ public class EjabberdXMLRPCClient {
                 return responseParser.parseGetRosterResponse(response);
             } catch (XmlRpcException e) {
                 return new GetRosterResponse(e.getMessage());
+            }
+        }, executorService);
+    }
+
+    public CompletableFuture<BooleanXmppResponse> sendChatMessage(String to, String from, String subject, String body) {
+        Map struct = new HashMap();
+        struct.put("type", "chat");
+        struct.put("to", to);
+        struct.put("from", from);
+        struct.put("subject", subject);
+        struct.put("body", body);
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                final HashMap response = executeXmlRpc("send_message", Arrays.asList(struct));
+                return responseParser.parseBooleanResponse(response);
+            } catch (XmlRpcException e) {
+                return new BooleanXmppResponse(e.getMessage());
             }
         }, executorService);
     }
