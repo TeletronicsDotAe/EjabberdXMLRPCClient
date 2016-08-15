@@ -143,6 +143,21 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    public CompletableFuture<BooleanXmppResponse> sendStanza(String to, String from, String stanza) {
+        Map struct = new HashMap();
+        struct.put("to", to);
+        struct.put("from", from);
+        struct.put("stanza", stanza);
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                final HashMap response = executeXmlRpc("send_stanza", Arrays.asList(struct));
+                return responseParser.parseBooleanResponse(response);
+            } catch (XmlRpcException e) {
+                return new BooleanXmppResponse(e.getMessage());
+            }
+        }, executorService);
+    }
+
     HashMap executeXmlRpc(String command, List params) throws XmlRpcException {
         return (HashMap) client.execute(command, params);
     }
