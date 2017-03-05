@@ -2,14 +2,14 @@ package ae.teletronics.ejabberd;
 
 import ae.teletronics.ejabberd.entity.RosterItem;
 import ae.teletronics.ejabberd.entity.User;
+import ae.teletronics.ejabberd.entity.UserPair;
 import ae.teletronics.ejabberd.entity.response.BooleanXmppResponse;
 import ae.teletronics.ejabberd.entity.response.GetRosterResponse;
+import ae.teletronics.ejabberd.entity.response.GetUserPairListResponse;
 import ae.teletronics.ejabberd.entity.response.GetUsersResponse;
 import org.apache.xmlrpc.XmlRpcException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by kristian on 4/7/16.
@@ -47,6 +47,33 @@ public class ResponseParser {
             }
         }
         return getRosterResponse;
+    }
+
+    public GetUserPairListResponse parseUserPairListResponse(HashMap response) {
+        GetUserPairListResponse getUserPairListResponse = new GetUserPairListResponse();
+        final Object[] responseList = (Object[]) response.get("response");
+        for (Object pairObject : responseList) {
+            if (pairObject instanceof HashMap && ((HashMap) pairObject).get("pairs") instanceof Object[]) {
+                final Object[] userPairMap = (Object[]) ((HashMap) pairObject).get("pairs");
+                UserPair userPair = parseUserPair(userPairMap);
+                getUserPairListResponse.getUserPairList().add(userPair);
+            }
+        }
+
+        return getUserPairListResponse;
+    }
+
+    UserPair parseUserPair(Object[] userPairList) {
+        UserPair userPair = new UserPair();
+        if (userPairList[0] instanceof HashMap) {
+            HashMap userMap = (HashMap) userPairList[0];
+            userPair.setUser((String) userMap.get("user"));
+        }
+        if (userPairList[1] instanceof HashMap) {
+            HashMap contactMap = (HashMap) userPairList[1];
+            userPair.setContact((String) contactMap.get("contact"));
+        }
+        return userPair;
     }
 
     RosterItem parseRosterItem(Object[] contact) {

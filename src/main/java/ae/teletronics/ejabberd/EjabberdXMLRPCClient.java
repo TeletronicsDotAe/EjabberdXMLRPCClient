@@ -3,6 +3,7 @@ package ae.teletronics.ejabberd;
 import ae.teletronics.ejabberd.entity.response.BooleanXmppResponse;
 import ae.teletronics.ejabberd.entity.response.GetRosterResponse;
 import ae.teletronics.ejabberd.entity.response.GetUsersResponse;
+import ae.teletronics.ejabberd.entity.response.GetUserPairListResponse;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 
@@ -154,6 +155,25 @@ public class EjabberdXMLRPCClient {
                 return responseParser.parseBooleanResponse(response);
             } catch (XmlRpcException e) {
                 return new BooleanXmppResponse(e.getMessage());
+            }
+        }, executorService);
+    }
+
+    public CompletableFuture<GetUserPairListResponse> processRosterItems(String action, String subs, String asks, String users, String contacts){
+        Map struct = new HashMap();
+        struct.put("action", action);
+        struct.put("subs", subs);
+        struct.put("asks", asks);
+        struct.put("users", users);
+        struct.put("contacts", contacts);
+
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                final HashMap response = executeXmlRpc("process_rosteritems", Arrays.asList(struct));
+                return responseParser.parseUserPairListResponse(response);
+            }catch (XmlRpcException e) {
+                return new GetUserPairListResponse(e.getMessage());
+
             }
         }, executorService);
     }
