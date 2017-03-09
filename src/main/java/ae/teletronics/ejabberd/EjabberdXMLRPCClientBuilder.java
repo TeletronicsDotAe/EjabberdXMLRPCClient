@@ -44,7 +44,7 @@ public class EjabberdXMLRPCClientBuilder {
         return this;
     }
 
-    public EjabberdXMLRPCClient build() throws MalformedURLException {
+    public IEjabberdXMLRPCClient build() throws MalformedURLException {
         final URL ejabberdUrl = buildUrl();
 
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
@@ -53,7 +53,7 @@ public class EjabberdXMLRPCClientBuilder {
         XmlRpcClient client = new XmlRpcClient();
         client.setConfig(config);
 
-        return new EjabberdXMLRPCClientImpl(this.executorService, client);
+        return new EjabberdXMLRPCClient(this.executorService, client);
     }
 
     URL buildUrl() throws MalformedURLException {
