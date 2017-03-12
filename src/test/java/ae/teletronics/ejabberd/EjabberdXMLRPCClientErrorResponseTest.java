@@ -20,7 +20,7 @@ public class EjabberdXMLRPCClientErrorResponseTest {
     public static final String ERROR_MESSAGE = "This is an error";
     XmlRpcClient xmlRpcClient = Mockito.mock(XmlRpcClient.class);
     ExecutorService executorService = Executors.newSingleThreadExecutor();
-    final EjabberdXMLRPCClient ejabberdXmlrpcClient = new EjabberdXMLRPCClient(executorService, xmlRpcClient);
+    final IEjabberdXMLRPCClient ejabberdXmlrpcClient = new EjabberdXMLRPCClient(executorService, xmlRpcClient);
 
     @Before
     public void setup() throws Exception {

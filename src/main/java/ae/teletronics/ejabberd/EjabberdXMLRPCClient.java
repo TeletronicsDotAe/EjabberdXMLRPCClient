@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * Created by kristian on 4/7/16.
  */
-public class EjabberdXMLRPCClient {
+public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
 
     ExecutorService executorService;
     XmlRpcClient client = new XmlRpcClient();
@@ -28,6 +28,7 @@ public class EjabberdXMLRPCClient {
         this.client = client;
     }
 
+    @Override
     public CompletableFuture<BooleanXmppResponse> createUser(String username, String host, String password){
         Map params = new HashMap();
         params.put("user", username);
@@ -47,6 +48,7 @@ public class EjabberdXMLRPCClient {
 
     }
 
+    @Override
     public CompletableFuture<BooleanXmppResponse> deleteUser(String username, String host){
         Map params = new HashMap();
         params.put("user", username);
@@ -63,6 +65,7 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    @Override
     public CompletableFuture<GetUsersResponse> getUsers(String host){
         Map params = new HashMap();
         params.put("host", host);
@@ -77,6 +80,7 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    @Override
     public CompletableFuture<BooleanXmppResponse> addRosterItem(String localuser, String localserver, String user, String server, String nick, String group, String subs){
         Map params = new HashMap();
         params.put("localuser", localuser);
@@ -97,6 +101,7 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    @Override
     public CompletableFuture<BooleanXmppResponse> deleteRosterItem(String localuser, String localserver, String user, String server){
         Map params = new HashMap();
         params.put("localuser", localuser);
@@ -113,6 +118,7 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    @Override
     public CompletableFuture<GetRosterResponse> getRoster(String user, String server){
         Map struct = new HashMap();
         struct.put("user", user);
@@ -127,6 +133,7 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    @Override
     public CompletableFuture<BooleanXmppResponse> sendChatMessage(String to, String from, String subject, String body) {
         Map struct = new HashMap();
         struct.put("type", "chat");
@@ -144,6 +151,7 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    @Override
     public CompletableFuture<BooleanXmppResponse> sendStanza(String to, String from, String stanza) {
         Map struct = new HashMap();
         struct.put("to", to);
@@ -159,6 +167,7 @@ public class EjabberdXMLRPCClient {
         }, executorService);
     }
 
+    @Override
     public CompletableFuture<GetUserPairListResponse> processRosterItems(String action, String subs, String asks, String users, String contacts){
         Map struct = new HashMap();
         struct.put("action", action);
