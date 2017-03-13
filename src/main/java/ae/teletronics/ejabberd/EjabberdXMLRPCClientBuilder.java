@@ -1,5 +1,6 @@
 package ae.teletronics.ejabberd;
 
+import ae.teletronics.ejabberd.entity.IEjabberdXMLRPCClientBuilder;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by kristian on 4/7/16.
  */
-public class EjabberdXMLRPCClientBuilder {
+public class EjabberdXMLRPCClientBuilder implements IEjabberdXMLRPCClientBuilder {
 
     ExecutorService executorService = Executors.newCachedThreadPool();
     String ejabberdHostname = "localhost";
@@ -19,31 +20,37 @@ public class EjabberdXMLRPCClientBuilder {
     String ejabberdProtocol = "http";
     String ejabberdPath = "/RPC2";
 
+    @Override
     public EjabberdXMLRPCClientBuilder setExecutorService(ExecutorService executorService){
         this.executorService = executorService;
         return this;
     }
 
+    @Override
     public EjabberdXMLRPCClientBuilder setEjabberdHostname(String ejabberdHostname){
         this.ejabberdHostname = ejabberdHostname;
         return this;
     }
 
+    @Override
     public EjabberdXMLRPCClientBuilder setEjabberdPort(String ejabberdPort){
         this.ejabberdPort = ejabberdPort;
         return this;
     }
 
+    @Override
     public EjabberdXMLRPCClientBuilder setEjabberdProtocol(String ejabberdProtocol){
         this.ejabberdProtocol = ejabberdProtocol;
         return this;
     }
 
+    @Override
     public EjabberdXMLRPCClientBuilder setEjabberdPath(String ejabberdPath){
         this.ejabberdPath = ejabberdPath;
         return this;
     }
 
+    @Override
     public IEjabberdXMLRPCClient build() throws MalformedURLException {
         final URL ejabberdUrl = buildUrl();
 
