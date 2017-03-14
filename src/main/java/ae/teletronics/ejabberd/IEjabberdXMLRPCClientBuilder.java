@@ -1,6 +1,4 @@
-package ae.teletronics.ejabberd.entity;
-
-import ae.teletronics.ejabberd.IEjabberdXMLRPCClient;
+package ae.teletronics.ejabberd;
 
 import java.net.MalformedURLException;
 import java.util.concurrent.ExecutorService;
