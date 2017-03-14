@@ -2,8 +2,8 @@ package ae.teletronics.ejabberd;
 
 import ae.teletronics.ejabberd.entity.response.BooleanXmppResponse;
 import ae.teletronics.ejabberd.entity.response.GetRosterResponse;
-import ae.teletronics.ejabberd.entity.response.GetUsersResponse;
 import ae.teletronics.ejabberd.entity.response.GetUserPairListResponse;
+import ae.teletronics.ejabberd.entity.response.GetUsersResponse;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 
@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -40,9 +41,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final HashMap createUserXMLRPCResponse = executeXmlRpc("register", Arrays.asList(params));
                 return responseParser.parseBooleanResponse(createUserXMLRPCResponse);
             } catch (XmlRpcException e) {
-                final BooleanXmppResponse booleanXmppResponse = new BooleanXmppResponse();
-                booleanXmppResponse.setError(e.getMessage());
-                return booleanXmppResponse;
+                throw new CompletionException(e);
             }
         }, executorService);
 
@@ -58,9 +57,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final HashMap deleteUserXMLRPCResponse = executeXmlRpc("unregister", Arrays.asList(params));
                 return responseParser.parseBooleanResponse(deleteUserXMLRPCResponse);
             } catch (XmlRpcException e) {
-                final BooleanXmppResponse booleanXmppResponse = new BooleanXmppResponse();
-                booleanXmppResponse.setError(e.getMessage());
-                return booleanXmppResponse;
+                throw new CompletionException(e);
             }
         }, executorService);
     }
@@ -75,7 +72,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final GetUsersResponse getUsersResponse = responseParser.parseGetUserResponse(response);
                 return getUsersResponse;
             } catch (XmlRpcException e) {
-                return new GetUsersResponse(e.getMessage());
+                throw new CompletionException(e);
             }
         }, executorService);
     }
@@ -96,7 +93,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final BooleanXmppResponse booleanXmppResponse = responseParser.parseBooleanResponse(response);
                 return booleanXmppResponse;
             } catch (XmlRpcException e) {
-                return new BooleanXmppResponse(e.getMessage());
+                throw new CompletionException(e);
             }
         }, executorService);
     }
@@ -113,7 +110,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final HashMap response = executeXmlRpc("delete_rosteritem", Arrays.asList(params));
                 return responseParser.parseBooleanResponse(response);
             } catch (XmlRpcException e) {
-                return new BooleanXmppResponse(e.getMessage());
+                throw new CompletionException(e);
             }
         }, executorService);
     }
@@ -128,7 +125,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final HashMap response = executeXmlRpc("get_roster", Arrays.asList(struct));
                 return responseParser.parseGetRosterResponse(response);
             } catch (XmlRpcException e) {
-                return new GetRosterResponse(e.getMessage());
+                throw new CompletionException(e);
             }
         }, executorService);
     }
@@ -146,7 +143,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final HashMap response = executeXmlRpc("send_message", Arrays.asList(struct));
                 return responseParser.parseBooleanResponse(response);
             } catch (XmlRpcException e) {
-                return new BooleanXmppResponse(e.getMessage());
+                throw new CompletionException(e);
             }
         }, executorService);
     }
@@ -162,7 +159,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final HashMap response = executeXmlRpc("send_stanza", Arrays.asList(struct));
                 return responseParser.parseBooleanResponse(response);
             } catch (XmlRpcException e) {
-                return new BooleanXmppResponse(e.getMessage());
+                throw new CompletionException(e);
             }
         }, executorService);
     }
@@ -181,8 +178,7 @@ public class EjabberdXMLRPCClient implements IEjabberdXMLRPCClient {
                 final HashMap response = executeXmlRpc("process_rosteritems", Arrays.asList(struct));
                 return responseParser.parseUserPairListResponse(response);
             }catch (XmlRpcException e) {
-                return new GetUserPairListResponse(e.getMessage());
-
+                throw new CompletionException(e);
             }
         }, executorService);
     }

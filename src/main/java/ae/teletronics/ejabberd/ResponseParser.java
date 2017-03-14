@@ -7,7 +7,6 @@ import ae.teletronics.ejabberd.entity.response.BooleanXmppResponse;
 import ae.teletronics.ejabberd.entity.response.GetRosterResponse;
 import ae.teletronics.ejabberd.entity.response.GetUserPairListResponse;
 import ae.teletronics.ejabberd.entity.response.GetUsersResponse;
-import org.apache.xmlrpc.XmlRpcException;
 
 import java.util.HashMap;
 
@@ -16,7 +15,7 @@ import java.util.HashMap;
  */
 public class ResponseParser {
 
-    BooleanXmppResponse parseBooleanResponse(HashMap response) throws XmlRpcException {
+    BooleanXmppResponse parseBooleanResponse(HashMap response) {
         int res = (int) response.get("res");
         final BooleanXmppResponse booleanXmppResponse = new BooleanXmppResponse(res);
         if (!booleanXmppResponse.isSuccessFull()) {
