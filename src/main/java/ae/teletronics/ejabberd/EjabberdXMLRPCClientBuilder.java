@@ -1,6 +1,5 @@
 package ae.teletronics.ejabberd;
 
-import ae.teletronics.ejabberd.entity.IEjabberdXMLRPCClientBuilder;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
