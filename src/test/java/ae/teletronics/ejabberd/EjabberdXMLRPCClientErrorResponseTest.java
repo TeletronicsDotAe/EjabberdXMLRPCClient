@@ -35,7 +35,7 @@ public class EjabberdXMLRPCClientErrorResponseTest {
     @Test
     public void testCreateUser() throws Exception {
         expectedException.expectCause(isA(XmlRpcException.class));
-        ejabberdXmlrpcClient.createUser("kristian", "test.local", "just").join();
+        ejabberdXmlrpcClient.createUser("kristian", "test.local", "just").get();
     }
 
     @Test
